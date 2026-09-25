@@ -1,0 +1,164 @@
+{
+  "policy_version": 1,
+  "triager": "rules",
+  "model": "",
+  "dataset": "findsecbugs.jsonl",
+  "certified_at": "2026-09-24T11:15:51+00:00",
+  "expires_at": "2026-12-23T11:15:51+00:00",
+  "thresholds": {
+    "max_false_dismissal_upper95": 0.05,
+    "min_real_samples": 30,
+    "min_consistency": 0.95,
+    "min_noise_reduction": 0.25,
+    "block_below_accuracy": 0.6,
+    "block_below_consistency": 0.8,
+    "min_confidence": 0.8,
+    "valid_days": 90
+  },
+  "categories": {
+    "cmdi": {
+      "mode": "assist",
+      "reason": "triager abstained on 100%: it cannot decide this category",
+      "evidence": {
+        "n": 237,
+        "n_real": 126,
+        "false_dismissal_rate": 0.0,
+        "false_dismissal_upper95": 0.029586819632536877,
+        "noise_reduction": 0.0,
+        "consistency": 1.0,
+        "abstention_rate": 1.0
+      }
+    },
+    "crypto": {
+      "mode": "auto_dismiss",
+      "reason": "false-dismissal upper bound 2.9%, removes 100% of noise, consistency 100%",
+      "evidence": {
+        "n": 223,
+        "n_real": 130,
+        "false_dismissal_rate": 0.0,
+        "false_dismissal_upper95": 0.02870258574314712,
+        "noise_reduction": 1.0,
+        "consistency": 1.0,
+        "abstention_rate": 0.0
+      }
+    },
+    "hash": {
+      "mode": "assist",
+      "reason": "scanner produced no false positives here: nothing for AI to remove",
+      "evidence": {
+        "n": 89,
+        "n_real": 89,
+        "false_dismissal_rate": 0.0,
+        "false_dismissal_upper95": 0.04137800296418846,
+        "noise_reduction": 0.0,
+        "consistency": 1.0,
+        "abstention_rate": 0.0
+      }
+    },
+    "ldapi": {
+      "mode": "assist",
+      "reason": "triager abstained on 100%: it cannot decide this category",
+      "evidence": {
+        "n": 54,
+        "n_real": 27,
+        "false_dismissal_rate": 0.0,
+        "false_dismissal_upper95": 0.12455903714463581,
+        "noise_reduction": 0.0,
+        "consistency": 1.0,
+        "abstention_rate": 1.0
+      }
+    },
+    "pathtraver": {
+      "mode": "assist",
+      "reason": "triager abstained on 100%: it cannot decide this category",
+      "evidence": {
+        "n": 244,
+        "n_real": 128,
+        "false_dismissal_rate": 0.0,
+        "false_dismissal_upper95": 0.02913799589810803,
+        "noise_reduction": 0.0,
+        "consistency": 1.0,
+        "abstention_rate": 1.0
+      }
+    },
+    "securecookie": {
+      "mode": "assist",
+      "reason": "scanner produced no false positives here: nothing for AI to remove",
+      "evidence": {
+        "n": 36,
+        "n_real": 36,
+        "false_dismissal_rate": 0.0,
+        "false_dismissal_upper95": 0.09642183044857634,
+        "noise_reduction": 0.0,
+        "consistency": 1.0,
+        "abstention_rate": 0.0
+      }
+    },
+    "sqli": {
+      "mode": "assist",
+      "reason": "triager abstained on 100%: it cannot decide this category",
+      "evidence": {
+        "n": 482,
+        "n_real": 272,
+        "false_dismissal_rate": 0.0,
+        "false_dismissal_upper95": 0.013926833371036128,
+        "noise_reduction": 0.0,
+        "consistency": 1.0,
+        "abstention_rate": 1.0
+      }
+    },
+    "trustbound": {
+      "mode": "assist",
+      "reason": "triager abstained on 100%: it cannot decide this category",
+      "evidence": {
+        "n": 118,
+        "n_real": 83,
+        "false_dismissal_rate": 0.0,
+        "false_dismissal_upper95": 0.04423686343872062,
+        "noise_reduction": 0.0,
+        "consistency": 1.0,
+        "abstention_rate": 1.0
+      }
+    },
+    "weakrand": {
+      "mode": "assist",
+      "reason": "scanner produced no false positives here: nothing for AI to remove",
+      "evidence": {
+        "n": 218,
+        "n_real": 218,
+        "false_dismissal_rate": 0.0,
+        "false_dismissal_upper95": 0.017316860318353274,
+        "noise_reduction": 0.0,
+        "consistency": 1.0,
+        "abstention_rate": 0.0
+      }
+    },
+    "xpathi": {
+      "mode": "assist",
+      "reason": "triager abstained on 100%: it cannot decide this category",
+      "evidence": {
+        "n": 34,
+        "n_real": 15,
+        "false_dismissal_rate": 0.0,
+        "false_dismissal_upper95": 0.20388926630434784,
+        "noise_reduction": 0.0,
+        "consistency": 1.0,
+        "abstention_rate": 1.0
+      }
+    },
+    "xss": {
+      "mode": "assist",
+      "reason": "triager abstained on 100%: it cannot decide this category",
+      "evidence": {
+        "n": 377,
+        "n_real": 246,
+        "false_dismissal_rate": 0.0,
+        "false_dismissal_upper95": 0.015376142323776345,
+        "noise_reduction": 0.0,
+        "consistency": 1.0,
+        "abstention_rate": 1.0
+      }
+    }
+  },
+  "default_mode": "assist"
+}

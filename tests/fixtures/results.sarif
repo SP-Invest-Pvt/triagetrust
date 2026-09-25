@@ -1,0 +1,8 @@
+{"version": "2.1.0", "runs": [{"tool": {"driver": {"name": "semgrep", "rules": [
+  {"id": "java.sqli.tainted", "properties": {"tags": ["CWE-89: SQL Injection"]}}]}},
+  "results": [
+   {"ruleId": "java.sqli.tainted", "message": {"text": "tainted SQL"},
+    "locations": [{"physicalLocation": {"artifactLocation": {"uri": "app/UserDao.java"}, "region": {"startLine": 7}}}]},
+   {"ruleId": "java.sqli.tainted", "message": {"text": "tainted SQL"}, "suppressions": [{"kind": "external", "status": "accepted"}],
+    "locations": [{"physicalLocation": {"artifactLocation": {"uri": "app/UserDao.java"}, "region": {"startLine": 6}}}]}
+  ]}]}

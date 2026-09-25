@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>AI triage scorecard: OWASP Benchmark, FindSecBugs findings</title><style>
+:root{--ink:#1b2430;--muted:#5b6673;--rule:#d9dee3;--paper:#fff;--steel:#3e6a8a;--ok:#2f7d4f;--warn:#a86a12;--bad:#b23b3b;--wash:#f3f5f7}
+@media (prefers-color-scheme:dark){:root{--ink:#e6eaee;--muted:#9aa5b1;--rule:#34404c;--paper:#141a21;--steel:#7fa9c8;--ok:#5fb383;--warn:#d9a441;--bad:#e07474;--wash:#1b232c}}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif;font-variant-numeric:tabular-nums}
+main{max-width:1080px;margin:0 auto;padding:40px 24px 64px}
+h1{font-size:30px;line-height:1.2;margin:0 0 8px;font-weight:650;letter-spacing:-.01em}
+h2{font-size:19px;margin:44px 0 6px;font-weight:650}
+p.lede{font-size:18px;color:var(--muted);max-width:70ch;margin:0 0 8px}
+p.note{color:var(--muted);max-width:75ch;margin:4px 0 14px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:720px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--rule);text-align:right;vertical-align:middle}
+th:first-child,td:first-child,.l{text-align:left}
+th{font-size:13px;color:var(--muted);font-weight:600}
+tr.hl td{background:var(--wash)}
+.mode{display:inline-block;padding:2px 9px;border-radius:3px;font-size:13px;font-weight:600;border:1px solid}
+.m-auto_dismiss{color:var(--ok);border-color:var(--ok)}.m-assist{color:var(--warn);border-color:var(--warn)}.m-blocked{color:var(--bad);border-color:var(--bad)}
+.why{color:var(--muted);font-size:13px;text-align:left;max-width:340px}
+.bar{position:relative;height:12px;width:160px;background:var(--wash);border-radius:2px;display:inline-block;vertical-align:middle}
+.bar i{position:absolute;top:0;bottom:0;left:0;background:var(--steel);border-radius:2px}
+.bar b{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--bad)}
+.headline{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:26px 0 8px}
+.headline div{background:var(--paper);padding:16px}
+.headline strong{display:block;font-size:26px;font-weight:650}
+.headline span{color:var(--muted);font-size:14px}
+footer{margin-top:48px;color:var(--muted);font-size:13px;border-top:1px solid var(--rule);padding-top:14px}
+code{font-family:ui-monospace,Consolas,monospace;font-size:13px}
+</style></head>
+<body><main>
+<h1>AI triage scorecard: OWASP Benchmark, FindSecBugs findings</h1>
+<p class="lede">Which security findings can an AI close on its own, and which still need a person. Measured against ground truth, not vendor claims.</p>
+<div class="headline"><div><strong>1 of 11</strong><span>categories certified for auto-dismiss</span></div><div><strong>15.5 h</strong><span>analyst time returned in certified categories</span></div><div><strong>0</strong><span>real vulnerabilities auto-dismissed in the evidence</span></div><div><strong>2026-12-23</strong><span>policy expiry, then re-certify</span></div></div>
+<h2>Triagers compared</h2>
+<p class="note">Dataset: findsecbugs.jsonl. False dismissal means a real vulnerability the triager would have closed.
+Queue precision is the share of findings left for analysts that are real.</p>
+<div class="scroll"><table><thead><tr><th>Triager</th><th>Findings</th><th>Runs</th><th>False dismissals</th><th>Noise removed</th><th>Abstained</th><th>Accuracy when decided</th><th>Consistency</th><th>Queue precision</th><th>Hours saved</th></tr></thead>
+<tbody><tr class=""><td>scanner-as-is<br><code></code></td><td>2112</td><td>1</td><td>0.0%<br><small>≤ 0.3%</small></td><td>0.0%</td><td>0.0%</td><td>64.9%</td><td>100.0%</td><td>64.9% → 64.9%</td><td>0.0</td></tr><tr class="hl"><td>rules<br><code></code></td><td>2112</td><td>1</td><td>0.0%<br><small>≤ 0.3%</small></td><td>12.5%</td><td>73.2%</td><td>100.0%</td><td>100.0%</td><td>64.9% → 67.9%</td><td>15.5</td></tr></tbody></table></div>
+
+<h2>Automation policy for rules <code></code></h2>
+<p class="note">Auto-dismiss requires the 95% upper bound on false dismissals to stay under the red line
+(5.0%), at least 30 real vulnerabilities in the evidence,
+95.0% identical verdicts across repeated runs, and at least 25.0% of the noise removed.
+Everything else goes to an analyst.</p>
+<div class="scroll"><table><thead><tr><th>Category</th><th class="l">Mode</th><th>Findings</th><th>Real</th><th>False dismissals, 95% upper</th><th>Noise removed</th><th>Consistency</th><th class="l">Why</th></tr></thead>
+<tbody><tr><td>Weak cryptography</td><td class="l"><span class="mode m-auto_dismiss">Auto-dismiss</span></td><td>223</td><td>130</td><td><span class="bar" title="95% upper bound 2.9%; limit 5.0%"><i style="width:11.5%"></i><b style="left:20.0%"></b></span> 2.9%</td><td>100.0%</td><td>100.0%</td><td class="why">false-dismissal upper bound 2.9%, removes 100% of noise, consistency 100%</td></tr><tr><td>OS command injection</td><td class="l"><span class="mode m-assist">Analyst decides</span></td><td>237</td><td>126</td><td><span class="bar" title="95% upper bound 3.0%; limit 5.0%"><i style="width:11.8%"></i><b style="left:20.0%"></b></span> 3.0%</td><td>0.0%</td><td>100.0%</td><td class="why">triager abstained on 100%: it cannot decide this category</td></tr><tr><td>Weak hash</td><td class="l"><span class="mode m-assist">Analyst decides</span></td><td>89</td><td>89</td><td><span class="bar" title="95% upper bound 4.1%; limit 5.0%"><i style="width:16.6%"></i><b style="left:20.0%"></b></span> 4.1%</td><td>0.0%</td><td>100.0%</td><td class="why">scanner produced no false positives here: nothing for AI to remove</td></tr><tr><td>LDAP injection</td><td class="l"><span class="mode m-assist">Analyst decides</span></td><td>54</td><td>27</td><td><span class="bar" title="95% upper bound 12.5%; limit 5.0%"><i style="width:49.8%"></i><b style="left:20.0%"></b></span> 12.5%</td><td>0.0%</td><td>100.0%</td><td class="why">triager abstained on 100%: it cannot decide this category</td></tr><tr><td>Path traversal</td><td class="l"><span class="mode m-assist">Analyst decides</span></td><td>244</td><td>128</td><td><span class="bar" title="95% upper bound 2.9%; limit 5.0%"><i style="width:11.7%"></i><b style="left:20.0%"></b></span> 2.9%</td><td>0.0%</td><td>100.0%</td><td class="why">triager abstained on 100%: it cannot decide this category</td></tr><tr><td>Cookie without Secure flag</td><td class="l"><span class="mode m-assist">Analyst decides</span></td><td>36</td><td>36</td><td><span class="bar" title="95% upper bound 9.6%; limit 5.0%"><i style="width:38.6%"></i><b style="left:20.0%"></b></span> 9.6%</td><td>0.0%</td><td>100.0%</td><td class="why">scanner produced no false positives here: nothing for AI to remove</td></tr><tr><td>SQL injection</td><td class="l"><span class="mode m-assist">Analyst decides</span></td><td>482</td><td>272</td><td><span class="bar" title="95% upper bound 1.4%; limit 5.0%"><i style="width:5.6%"></i><b style="left:20.0%"></b></span> 1.4%</td><td>0.0%</td><td>100.0%</td><td class="why">triager abstained on 100%: it cannot decide this category</td></tr><tr><td>Trust boundary violation</td><td class="l"><span class="mode m-assist">Analyst decides</span></td><td>118</td><td>83</td><td><span class="bar" title="95% upper bound 4.4%; limit 5.0%"><i style="width:17.7%"></i><b style="left:20.0%"></b></span> 4.4%</td><td>0.0%</td><td>100.0%</td><td class="why">triager abstained on 100%: it cannot decide this category</td></tr><tr><td>Weak randomness</td><td class="l"><span class="mode m-assist">Analyst decides</span></td><td>218</td><td>218</td><td><span class="bar" title="95% upper bound 1.7%; limit 5.0%"><i style="width:6.9%"></i><b style="left:20.0%"></b></span> 1.7%</td><td>0.0%</td><td>100.0%</td><td class="why">scanner produced no false positives here: nothing for AI to remove</td></tr><tr><td>XPath injection</td><td class="l"><span class="mode m-assist">Analyst decides</span></td><td>34</td><td>15</td><td><span class="bar" title="95% upper bound 20.4%; limit 5.0%"><i style="width:81.6%"></i><b style="left:20.0%"></b></span> 20.4%</td><td>0.0%</td><td>100.0%</td><td class="why">triager abstained on 100%: it cannot decide this category</td></tr><tr><td>Cross-site scripting</td><td class="l"><span class="mode m-assist">Analyst decides</span></td><td>377</td><td>246</td><td><span class="bar" title="95% upper bound 1.5%; limit 5.0%"><i style="width:6.2%"></i><b style="left:20.0%"></b></span> 1.5%</td><td>0.0%</td><td>100.0%</td><td class="why">triager abstained on 100%: it cannot decide this category</td></tr></tbody></table></div>
+<footer>Generated by TriageTrust. Hours saved assume 10.0 analyst minutes per dismissed false positive.</footer>
+</main></body></html>

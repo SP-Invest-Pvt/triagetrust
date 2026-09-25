@@ -1,0 +1,20 @@
+{
+  "totalCount": 2,
+  "results": [
+    {
+      "type": "sast", "id": "a1", "similarityId": "-1234567", "severity": "HIGH", "state": "CONFIRMED", "status": "RECURRENT",
+      "data": {"queryName": "SQL_Injection", "group": "Java_High_Risk", "languageName": "Java",
+               "nodes": [{"fileName": "/app/UserDao.java", "line": 5, "name": "getParameter", "method": "find"},
+                         {"fileName": "/app/UserDao.java", "line": 7, "name": "executeQuery", "method": "find"}]},
+      "vulnerabilityDetails": {"cweId": 89}
+    },
+    {
+      "type": "sca", "id": "x", "data": {}
+    },
+    {
+      "type": "sast", "id": "a2", "similarityId": "7654321", "severity": "LOW", "state": "TO_VERIFY",
+      "data": {"queryName": "Use_Of_Hardcoded_Password", "nodes": [{"fileName": "/app/UserDao.java", "line": 6}]},
+      "vulnerabilityDetails": {"cweId": 259}
+    }
+  ]
+}
