@@ -5,7 +5,7 @@ disk keyed by (provider, model, prompt, run), so an interrupted evaluation resum
 stopped and a re-run costs nothing.
 
 Providers
-  gemini     GEMINI_API_KEY (or GOOGLE_API_KEY)     default model gemini-2.5-flash
+  gemini     GEMINI_API_KEY (or GOOGLE_API_KEY)     default model gemini-3.8-flash
   anthropic  ANTHROPIC_API_KEY                      default model claude-haiku-4-5
   openai     OPENAI_API_KEY, OPENAI_BASE_URL         default model gpt-4o-mini
   ollama     OLLAMA_BASE_URL (http://localhost:11434) default model qwen2.5-coder:7b
@@ -16,13 +16,14 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import time
 import urllib.error
 import urllib.request
 from pathlib import Path
 
 DEFAULT_MODELS = {
-    "gemini": "gemini-2.5-flash",
+    "gemini": "gemini-3.8-flash",
     "anthropic": "claude-haiku-4-5",
     "openai": "gpt-4o-mini",
     "ollama": "qwen2.5-coder:7b",
@@ -31,6 +32,13 @@ DEFAULT_MODELS = {
 
 class ProviderError(RuntimeError):
     pass
+
+
+def _rate_limit(detail: str) -> tuple[float | None, bool]:
+    """(seconds the API asks us to wait, whether a daily quota is exhausted) from a 429 body."""
+    wait = re.search(r'"retryDelay":\s*"(\d+(?:\.\d+)?)s"', detail)
+    daily = re.search(r'"quotaId":\s*"[^"]*PerDay', detail) is not None
+    return (float(wait.group(1)) if wait else None), daily
 
 
 def _post(url: str, body: dict, headers: dict, timeout: int = 120) -> dict:
@@ -44,7 +52,7 @@ class Provider:
     name = "base"
 
     def __init__(self, model: str | None = None, temperature: float = 0.2,
-                 cache_dir: str | Path = ".cache/llm", max_retries: int = 5):
+                 cache_dir: str | Path = ".cache/llm", max_retries: int = 8):
         self.model = model or os.getenv("TRIAGETRUST_MODEL") or DEFAULT_MODELS.get(self.name, "")
         self.temperature = temperature
         self.cache_dir = Path(cache_dir)
@@ -68,10 +76,17 @@ class Provider:
                 path.write_text(json.dumps({"model": self.model, "text": text}))
                 return text
             except urllib.error.HTTPError as e:
-                detail = e.read().decode(errors="replace")[:300]
+                body = e.read().decode(errors="replace")
+                detail = body[:300]
+                wait = None
+                if e.code == 429:
+                    wait, daily = _rate_limit(body)
+                    if daily:
+                        raise ProviderError(f"{self.name} HTTP 429: daily quota exhausted for {self.model}; "
+                                            "cached responses are kept, re-run after the quota resets") from e
                 if e.code in (429, 500, 502, 503, 504) and attempt < self.max_retries - 1:
-                    time.sleep(delay)
-                    delay *= 2
+                    time.sleep(min(max(wait or 0, delay), 90))
+                    delay = min(delay * 2, 60)
                     continue
                 raise ProviderError(f"{self.name} HTTP {e.code}: {detail}") from e
             except (urllib.error.URLError, TimeoutError) as e:
@@ -96,7 +111,8 @@ class Gemini(Provider):
                 "generationConfig": {"temperature": self.temperature, "responseMimeType": "application/json"}}
         data = _post(url, body, {"x-goog-api-key": key})
         try:
-            return "".join(p.get("text", "") for p in data["candidates"][0]["content"]["parts"])
+            parts = data["candidates"][0]["content"]["parts"]
+            return "".join(p.get("text", "") for p in parts if not p.get("thought"))
         except (KeyError, IndexError) as e:
             raise ProviderError(f"gemini: unexpected response {str(data)[:300]}") from e
 
