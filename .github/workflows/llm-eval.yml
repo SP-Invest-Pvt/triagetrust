@@ -34,6 +34,10 @@ jobs:
           path: .cache
           key: llm-cache-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: llm-cache-
+      - name: List available Gemini flash models
+        if: env.GEMINI_API_KEY != ''
+        run: |
+          curl -sf -H "x-goog-api-key: $GEMINI_API_KEY"             "https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000"             | python -c "import json,sys; [print(m['name'].split('/')[-1]) for m in json.load(sys.stdin).get('models',[]) if 'flash' in m['name'] and 'generateContent' in m.get('supportedGenerationMethods',[])]"             || echo "Could not list models"
       - name: Run evaluation with Gemini
         run: |
           if [ -z "$GEMINI_API_KEY" ]; then
