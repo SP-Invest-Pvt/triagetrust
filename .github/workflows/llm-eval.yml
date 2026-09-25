@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       model:
-        description: "Gemini model (blank = project default)"
+        description: "Gemini model (blank = gemini-3.8-flash)"
         required: false
         default: ""
   pull_request:
