@@ -1,0 +1,58 @@
+name: llm-eval
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "Gemini model (blank = project default)"
+        required: false
+        default: ""
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: llm-eval-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  llm-eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      MODEL: ${{ inputs.model || vars.GEMINI_MODEL }}
+      WORKERS: "2"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Restore LLM response cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache
+          key: llm-cache-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: llm-cache-
+      - name: Run evaluation with Gemini
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::warning title=LLM run skipped::GEMINI_API_KEY secret is not set. Add it with: gh secret set GEMINI_API_KEY -R ${{ github.repository }}"
+            echo "GEMINI_API_KEY is not set: skipping the LLM evaluation." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "Model: ${MODEL:-project default}"
+          PROVIDER=gemini ./scripts/run_all.sh
+      - name: Save LLM response cache
+        if: always() && env.GEMINI_API_KEY != ''
+        uses: actions/cache/save@v4
+        with:
+          path: .cache
+          key: llm-cache-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Upload results
+        if: always() && env.GEMINI_API_KEY != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: llm-eval-results
+          path: results/
+          if-no-files-found: warn
