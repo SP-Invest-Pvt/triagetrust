@@ -25,12 +25,12 @@ jobs:
       MODEL: ${{ inputs.model || vars.GEMINI_MODEL || 'gemini-3.5-flash-lite' }}
       WORKERS: "2"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Restore LLM response cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: .cache
           key: llm-cache-${{ github.run_id }}-${{ github.run_attempt }}
@@ -50,13 +50,13 @@ jobs:
           PROVIDER=gemini ./scripts/run_all.sh
       - name: Save LLM response cache
         if: always() && env.GEMINI_API_KEY != ''
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: .cache
           key: llm-cache-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Upload results
         if: always() && env.GEMINI_API_KEY != ''
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: llm-eval-results
           path: results/
