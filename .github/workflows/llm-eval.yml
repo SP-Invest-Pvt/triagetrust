@@ -7,6 +7,12 @@ on:
         required: false
         default: ""
   pull_request:
+    # Each evaluation is 600 LLM calls; skip it for docs-only changes.
+    paths:
+      - "triagetrust/**"
+      - "scripts/**"
+      - "pyproject.toml"
+      - ".github/workflows/llm-eval.yml"
 
 permissions:
   contents: read
