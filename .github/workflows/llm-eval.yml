@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       model:
-        description: "Gemini model (blank = gemini-3.8-flash)"
+        description: "Gemini model (blank = gemini-3.5-flash-lite)"
         required: false
         default: ""
   pull_request:
@@ -21,8 +21,8 @@ jobs:
     timeout-minutes: 120
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      # gemini-2.5-flash (the code default) is closed to new API users; pin a current flash model.
-      MODEL: ${{ inputs.model || vars.GEMINI_MODEL || 'gemini-3.8-flash' }}
+      # Free tier: gemini-2.5-flash is closed to new users and gemini-3.8-flash allows 20 requests/day.
+      MODEL: ${{ inputs.model || vars.GEMINI_MODEL || 'gemini-3.5-flash-lite' }}
       WORKERS: "2"
     steps:
       - uses: actions/checkout@v4

@@ -5,7 +5,7 @@ disk keyed by (provider, model, prompt, run), so an interrupted evaluation resum
 stopped and a re-run costs nothing.
 
 Providers
-  gemini     GEMINI_API_KEY (or GOOGLE_API_KEY)     default model gemini-3.8-flash
+  gemini     GEMINI_API_KEY (or GOOGLE_API_KEY)     default model gemini-3.5-flash-lite
   anthropic  ANTHROPIC_API_KEY                      default model claude-haiku-4-5
   openai     OPENAI_API_KEY, OPENAI_BASE_URL         default model gpt-4o-mini
   ollama     OLLAMA_BASE_URL (http://localhost:11434) default model qwen2.5-coder:7b
@@ -23,7 +23,7 @@ import urllib.request
 from pathlib import Path
 
 DEFAULT_MODELS = {
-    "gemini": "gemini-3.8-flash",
+    "gemini": "gemini-3.5-flash-lite",
     "anthropic": "claude-haiku-4-5",
     "openai": "gpt-4o-mini",
     "ollama": "qwen2.5-coder:7b",
