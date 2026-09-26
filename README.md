@@ -2,7 +2,7 @@
 
 Evidence-based governance for AI triage of security findings: measure when an AI may close SAST findings on its own, and prove it to an auditor.
 
-[![tests](https://github.com/SP-Invest-Pvt/triagetrust/actions/workflows/ci.yml/badge.svg)](../../actions/workflows/ci.yml)
+[![tests](https://github.com/SP-Invest-Pvt/triagetrust/actions/workflows/ci.yml/badge.svg)](../../actions/workflows/ci.yml) [![codeql](https://github.com/SP-Invest-Pvt/triagetrust/actions/workflows/codeql.yml/badge.svg)](../../actions/workflows/codeql.yml)
 
 ## The problem
 
