@@ -37,16 +37,19 @@ scanner results ──> ingest ──> findings (+ ground truth)
 
 The evaluation dataset is **real scanner output with ground truth for every finding**: FindSecBugs 1.4.6 results shipped with the [OWASP Benchmark](https://github.com/OWASP-Benchmark/BenchmarkJava), joined to the Benchmark's labelled test cases. That produces 2,112 findings, of which 742 (35%) are false positives. A third of an analyst's day on this backlog is wasted.
 
-Baseline results (reproduce with `./scripts/run_all.sh`, no API key needed):
+Results (the baselines reproduce with `./scripts/run_all.sh` and need no API key):
 
 | Triager | False dismissals (95% upper) | Noise removed | Abstained | Accuracy when decided |
 |---|---:|---:|---:|---:|
 | scanner-as-is | 0.0% (0.3%) | 0.0% | 0.0% | 64.9% |
 | rules | 0.0% (0.3%) | 12.5% | 73.2% | 100.0% |
+| LLM: Gemini `gemini-3.5-flash-lite` ([run](https://github.com/SP-Invest-Pvt/triagetrust/actions/runs/36081872467)) | 7.0% (12.7%) | 52.1% | 1.0% | 78.8% |
 
 The rule-based triager is certified for auto-dismiss in exactly one category, weak cryptography: 93 false positives are closed automatically, saving 15.5 analyst hours, with zero real vulnerabilities dismissed. It abstains on every injection category because it cannot follow data flow, and the policy correctly keeps those with analysts.
 
 Add an LLM and the scorecard answers the real question: which categories can it take over?
+
+**A real LLM run** (Gemini `gemini-3.5-flash-lite`, 200 stratified findings × 3 runs = 600 verdicts, [workflow run](https://github.com/SP-Invest-Pvt/triagetrust/actions/runs/36081872467)): the model removed **52.1%** of the noise, but it also dismissed **9 of 129 real vulnerabilities** (7.0%, 95% upper bound 12.7%). Its answer was the same on all three runs for 91% of findings. **No category is certified for auto-dismiss.** Eight stay with analysts and three are blocked (LDAP injection, path traversal and XPath injection, where accuracy on decided findings was below 60%). The dismissed real vulnerabilities were path traversal (3), LDAP injection (2), XSS (2), OS command injection (1) and trust boundary (1). Put simply, the model looks productive, and the governance layer is what stops those from being closed silently. 9 of the 600 outputs were malformed and were scored as uncertain.
 
 ```bash
 export GEMINI_API_KEY=...            # or ANTHROPIC_API_KEY / OPENAI_API_KEY

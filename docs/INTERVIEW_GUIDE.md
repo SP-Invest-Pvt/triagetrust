@@ -38,4 +38,4 @@ Every AppSec vendor now ships AI triage, and teams want to let it close findings
 
 * 2,112 real scanner findings, 742 false positives (35%).
 * Rules baseline: 0 real vulnerabilities dismissed; 12.5% of noise removed; certified only for weak cryptography (93 findings auto-closed).
-* Your LLM run: fill in false-dismissal upper bound, noise removed, consistency and certified categories from `results/scorecard.md`.
+* Your LLM run (Gemini `gemini-3.5-flash-lite`, 200 findings × 3 runs, [workflow run](https://github.com/SP-Invest-Pvt/triagetrust/actions/runs/36081872467)): false dismissals 9/129 real (7.0%), 95% upper bound **12.7%**; noise removed **52.1%** (37 of 71 false positives); consistency **91%**; abstained 1%; **0 categories certified** for auto-dismiss (8 assist, 3 blocked). The talking point is that an AI that removes half the noise would still have closed 9 real vulnerabilities, and the policy refused it.
